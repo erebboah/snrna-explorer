@@ -1,0 +1,14 @@
+name: snrna_explorer
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pandas
+  - matplotlib
+  - seaborn
+  - sqlite
+  - streamlit
+  - ipykernel
+  - jupyterlab
+
