@@ -1,54 +1,53 @@
 # app.py
 
 import streamlit as st
-import os
-from utils.metadata_loader import load_metadata
-from utils.color_palette import get_color_dict, show_color_picker
-from plotting.stacked_barplot import stacked_barplot_proportions
+from utils.routing import load_available_datasets, load_selected_metadata
+from modules.metadata_explorer import metadata_explorer
+from modules.gene_expression_explorer import gene_expression_explorer
 
-st.set_page_config(layout="wide")
-st.title("snRNA-seq Data Explorer")
+# st.set_page_config(layout="wide")
+# st.title("snRNA-seq Data Explorer")
 
-# Set metadata file path (can update later to be interactive)
-data_path = "data/metadata/IGVFB01_LeftCortex_metadata.sqlite"
+# dataset_options = ["Select a Dataset"] + load_available_datasets()
+# dataset = st.selectbox("🧬 Choose a Dataset", dataset_options)
 
-# Check if metadata file exists
-if not os.path.exists(data_path):
-    st.error(f"Metadata file not found at: {data_path}")
+# if dataset == "Select a Dataset":
+#     st.warning("Please select a dataset from the dropdown.")
+#     st.stop()
+
+st.markdown(
+    "<h2 style='text-align: center;'>🧬 Welcome to the snRNA-seq Data Explorer</h2>",
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    "<p style='text-align: center;'>Select a dataset to begin exploring proportions and gene expression.</p>",
+    unsafe_allow_html=True,
+)
+
+# Center the dropdown
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    dataset_options = ["Select a Dataset"] + load_available_datasets()
+    dataset = st.selectbox("Choose a Dataset", dataset_options, label_visibility="collapsed")
+
+if dataset == "Select a Dataset":
     st.stop()
 
-# Load metadata
-metadata = load_metadata(data_path)
 
-# Show basic info
-st.markdown("### Preview of Metadata")
-st.dataframe(metadata.head())
+# Load metadata once dataset is selected
+metadata = load_selected_metadata(dataset)
 
-# Get valid grouping columns (exclude individual cell IDs)
-categorical_cols = metadata.select_dtypes(include="object").columns.tolist()
-excluded_cols = ["cellID", "cell_id", "CellID"]
-valid_group_cols = [
-    col for col in categorical_cols
-    if col not in excluded_cols and metadata[col].nunique() < len(metadata)
-]
+# Horizontal divider
+st.markdown("---")
 
-# User selects keys for plotting
-cluster_key = st.selectbox("Select Cluster Key (e.g., leiden)", valid_group_cols)
-var_key = st.selectbox("Select Grouping Variable (e.g., sex, genotype)", valid_group_cols)
+# Section 1: Metadata proportions
+st.subheader("📊 Metadata Proportion Explorer")
+metadata_explorer(metadata)
 
-# Load or define color palette
-color_dict = get_color_dict(var_key, metadata)
+# Horizontal divider
+st.markdown("---")
 
-# Optional color customization
-if st.checkbox("Customize colors?"):
-    color_dict = show_color_picker(var_key, metadata, color_dict)
-
-# Plot button
-if st.button("Generate Stacked Bar Plot"):
-    fig = stacked_barplot_proportions(
-        metadata,
-        cluster_key=cluster_key,
-        var_key=var_key,
-        color_dict=color_dict
-    )
-    st.pyplot(fig)
+# Section 2: Gene expression
+st.subheader("🔥 Gene Expression Explorer")
+gene_expression_explorer(dataset)
