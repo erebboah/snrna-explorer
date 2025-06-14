@@ -5,16 +5,6 @@ from utils.routing import load_available_datasets, load_selected_metadata
 from modules.metadata_explorer import metadata_explorer
 from modules.gene_expression_explorer import gene_expression_explorer
 
-# st.set_page_config(layout="wide")
-# st.title("snRNA-seq Data Explorer")
-
-# dataset_options = ["Select a Dataset"] + load_available_datasets()
-# dataset = st.selectbox("🧬 Choose a Dataset", dataset_options)
-
-# if dataset == "Select a Dataset":
-#     st.warning("Please select a dataset from the dropdown.")
-#     st.stop()
-
 st.markdown(
     "<h2 style='text-align: center;'>🧬 Welcome to the snRNA-seq Data Explorer</h2>",
     unsafe_allow_html=True,
