@@ -8,6 +8,7 @@ dependencies:
   - matplotlib
   - seaborn
   - sqlite
+  - scanpy
   - streamlit
   - ipykernel
   - jupyterlab

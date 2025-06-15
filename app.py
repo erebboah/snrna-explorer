@@ -1,12 +1,13 @@
 # app.py
 
 import streamlit as st
+import scanpy as sc
 from utils.routing import load_available_datasets, load_selected_metadata
 from modules.metadata_explorer import metadata_explorer
 from modules.gene_expression_explorer import gene_expression_explorer
 
 st.markdown(
-    "<h2 style='text-align: center;'>🧬 Welcome to the snRNA-seq Data Explorer</h2>",
+    "<h2 style='text-align: center;'>🧬 Welcome to the 8-cube snRNA-seq Data Explorer 🐭</h2>",
     unsafe_allow_html=True,
 )
 
@@ -32,12 +33,10 @@ metadata = load_selected_metadata(dataset)
 st.markdown("---")
 
 # Section 1: Metadata proportions
-st.subheader("📊 Metadata Proportion Explorer")
 metadata_explorer(metadata)
 
 # Horizontal divider
 st.markdown("---")
 
 # Section 2: Gene expression
-st.subheader("🔥 Gene Expression Explorer")
-gene_expression_explorer(dataset)
+gene_expression_explorer(dataset, metadata)

@@ -4,6 +4,7 @@ from utils.color_palette import get_color_dict, show_color_picker
 from plotting.stacked_barplot import stacked_barplot_proportions
 
 def metadata_explorer(metadata):
+    st.header("Metadata Proportion Explorer")
     st.markdown("### Preview of Metadata")
     st.dataframe(metadata.head())
 
